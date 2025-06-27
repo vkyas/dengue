@@ -1,8 +1,5 @@
 #!/bin/bash
 
-set -e
-set -o pipefail
-
 export NDK_VERSION="r26d"
 export PHP_VERSION="8.4.8"
 export API_LEVEL="22"
