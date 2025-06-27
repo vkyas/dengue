@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-php-android:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 🧾 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential autoconf bison re2c libtool pkg-config \
+            wget unzip tar xz-utils
+
+      - name: 📦 Run Build Script
+        run: |
+          chmod +x ./test.sh
+          ./test.sh
+      
+      - name: 📤 Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-android-arm32
+          path: php-android-arm32.tar.gz
