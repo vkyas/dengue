@@ -8,9 +8,9 @@ API_LEVEL=21
 TARGET="android-arm"
 ANDROID_ARCH="armeabi-v7a"
 TARGET_HOST="armv7a-linux-androideabi"
-INSTALL_DIR_OPENSSL="$HOME/content/openssl-android"
-INSTALL_DIR_CURL="$HOME/content/curl-android"
-NDK_DIR="$HOME/content/android-ndk-$NDK_VERSION"
+INSTALL_DIR_OPENSSL="$HOME/openssl-android"
+INSTALL_DIR_CURL="$HOME/curl-android"
+NDK_DIR="$HOME/android-ndk-$NDK_VERSION"
 HOST_TAG="linux-x86_64"
 
 # ====== Fungsi Error Handler ======
@@ -58,7 +58,7 @@ echo "🔧 Mengkonfigurasi OpenSSL..."
 ./Configure android-arm \
     --prefix=$INSTALL_DIR_OPENSSL/$ANDROID_ARCH \
     --cross-compile-prefix=$TOOLCHAIN/bin/${TARGET_HOST}- \
-    no-shared no-legacy no-tests no-apps || error_exit "Konfigurasi OpenSSL gagal"
+    no-shared no-legacy no-tests || error_exit "Konfigurasi OpenSSL no-apps gagal"
 
 # ✅ Hanya lanjut jika Makefile terbentuk
 if [ -f Makefile ]; then
@@ -70,8 +70,8 @@ else
 fi
 
 echo "🏗️  Membuild OpenSSL..."
-make -j$(nproc) build_libs || error_exit "Build library OpenSSL gagal"
-make install_sw || error_exit "Instalasi OpenSSL gagal"
+make -j$(nproc) build_libs > build-openssl.log 2>&1 || error_exit "Build OpenSSL gagal. Cek build-openssl.log"
+make install_sw > install-openssl.log 2>&1 || error_exit "Instalasi OpenSSL gagal. Cek install-openssl.log"
 cd ..
 
 # ====== Build cURL ======
@@ -104,8 +104,8 @@ echo "🔧 Konfigurasi cURL statis..."
     LIBS="-ldl -lm" || error_exit "Konfigurasi cURL gagal"
 
 echo "🏗️  Membuild cURL..."
-make -j$(nproc) || error_exit "Build cURL gagal"
-make install || error_exit "Instalasi cURL gagal"
+make -j$(nproc) > build-curl.log 2>&1 || error_exit "Build cURL gagal. Cek build-curl.log"
+make install > install-curl.log 2>&1 || error_exit "Install cURL gagal. Cek install-curl.log"
 
 # ====== Optimasi dan Verifikasi ======
 echo "🧽 Men-strip binary..."
