@@ -21,8 +21,8 @@ error_exit() {
 
 # 1. Instal dependensi sistem
 echo "Menginstal dependensi sistem..."
-sudo apt-get update -qq
-sudo apt-get install -y -qq wget unzip perl make curl || error_exit "Gagal menginstal dependensi"
+sudo apt update -qq
+sudo apt install -y -qq wget unzip perl make curl || error_exit "Gagal menginstal dependensi"
 
 # 2. Unduh Android NDK
 echo "Mengunduh Android NDK versi $NDK_VERSION..."
